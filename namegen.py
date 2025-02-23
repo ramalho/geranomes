@@ -47,9 +47,9 @@ class MarkovNameMaker:
                 model[key].append(next_char)
         return model, starters
 
-    def make_name(self, max_length: int = 80):
+    def make_name(self) -> str:
         name = ""
-        while len(name.split()) < 2: # restart if single name generated
+        while len(name.split()) < 3: # restart if short name generated
             name = random.choice(self.starters)
             while True:
                 key = name[-self.order :]
@@ -58,7 +58,10 @@ class MarkovNameMaker:
                 next_char = random.choice(self.model[key])
                 parts = name.split()
                 if next_char == self.end_char:
-                    if len(parts) >= 4:
+                    if (len(parts) >= 4
+                        and parts[-1] not in CONJUNCOES
+                        and len(parts[-1]) > 1
+                    ):
                         break
                     else:
                         next_char = " "
