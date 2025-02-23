@@ -48,26 +48,28 @@ class MarkovNameMaker:
         return model, starters
 
     def make_name(self, max_length: int = 80):
-        name = random.choice(self.starters)
-        while len(name) < max_length:
-            key = name[-self.order :]
-            if key not in self.model:
-                break
-            next_char = random.choice(self.model[key])
-            parts = name.split()
-            if next_char == self.end_char:
-                if len(parts) >= 4:
+        name = ""
+        while len(name.split()) < 2: # restart if single name generated
+            name = random.choice(self.starters)
+            while True:
+                key = name[-self.order :]
+                if key not in self.model:
                     break
-                else:
-                    next_char = " "
-            elif (
-                next_char == " "
-                and parts[-1] not in CONJUNCOES
-                and len(parts[-1]) > 1
-                and len(parts) >= 4
-            ):
-                break
-            name += next_char
+                next_char = random.choice(self.model[key])
+                parts = name.split()
+                if next_char == self.end_char:
+                    if len(parts) >= 4:
+                        break
+                    else:
+                        next_char = " "
+                elif (
+                    next_char == " "
+                    and parts[-1] not in CONJUNCOES
+                    and len(parts[-1]) > 1
+                    and len(parts) >= 4
+                ):
+                    break
+                name += next_char
         return name.strip()
 
 
