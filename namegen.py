@@ -80,5 +80,8 @@ def make_names(names_file_path, quantity, order):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print(f"Usage: {sys.argv[0]} <how_many_names>")
+        sys.exit(1)
     quantity = int(sys.argv[1])
     make_names("amostras/nomes.txt", quantity, 6)
