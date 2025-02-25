@@ -74,12 +74,15 @@ class MarkovNameMaker:
 
 
 def make_names(sample_file_path, quantity, order):
-    with open(sample_file_path) as f:
-        names = f.readlines()
-    maker = MarkovNameMaker(names, order)
-    for _ in range(quantity):
+    with open(sample_file_path) as sample:
+        maker = MarkovNameMaker(sample, order)
+    for i in range(quantity):
         print(maker.make_name())
-
+        if i % 1000 == 0 and not sys.stdout.isatty():
+            sys.stderr.write(f'\r{i:_} names')
+            sys.stderr.flush()
+    if not sys.stdout.isatty():
+        sys.stderr.write('\r{" "*80}\r')
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
