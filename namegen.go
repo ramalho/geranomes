@@ -8,7 +8,12 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
+)
+
+const (
+	ModelPath = "markov-model.gob"
+	Order     = 6
+	BatchSize = 10000
 )
 
 // MarkovModel maps n-grams to possible next characters
@@ -16,16 +21,6 @@ type MarkovModel map[string][]string
 
 // Starters is a list of possible starting sequences
 type Starters []string
-
-// Constants
-const (
-	ModelPath = "markov-model.gob"
-	Order     = 6
-	BatchSize = 10000
-)
-
-// Set of prepositions that shouldn't be the last word in a name
-var prefixes = map[string]bool{}
 
 // MarkovNameMaker generates plausible names using a Markov chain model
 type MarkovNameMaker struct {
@@ -35,15 +30,16 @@ type MarkovNameMaker struct {
 	starters Starters
 }
 
-// Initialize prefixes set with prepositions
+// Set of prepositions that shouldn't be the last word in a name
+var prefixes = map[string]bool{}
+
+// Initialize prefixes set
 func init() {
 	prepositions := "da das de di do dos du del von van"
 	prepositions += " " + strings.Title(prepositions)
 	for _, prefix := range strings.Split(prepositions, " ") {
 		prefixes[prefix] = true
 	}
-
-	rand.Seed(time.Now().UnixNano())
 }
 
 // NewMarkovNameMaker creates a new name generator
