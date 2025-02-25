@@ -85,6 +85,7 @@ def make_names(sample_file_path, quantity, order):
     if not sys.stdout.isatty():
         sys.stderr.write('\r{" "*80}\r')
 
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print(f'Usage: {sys.argv[0]} <how_many_names>')
