@@ -76,10 +76,11 @@ class MarkovNameMaker:
 def make_names(sample_file_path, quantity, order):
     with open(sample_file_path) as sample:
         maker = MarkovNameMaker(sample, order)
+    writing_to_file = not sys.stdout.isatty()
     for i in range(quantity):
         print(maker.make_name())
-        if i % 1000 == 0 and not sys.stdout.isatty():
-            sys.stderr.write(f'\r{i:_} names')
+        if writing_to_file and i % 1000 == 0:
+            sys.stderr.write(f'\r{i:_} names generated')
             sys.stderr.flush()
     if not sys.stdout.isatty():
         sys.stderr.write('\r{" "*80}\r')
