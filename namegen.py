@@ -47,7 +47,7 @@ class MarkovNameMaker:
                 model[key].append(next_char)
         return model, starters
 
-    def legit_name(self, name: str) -> bool:
+    def plausible_name(self, name: str) -> bool:
         parts = name.split()
         return len(parts) >= 4 and parts[-1] not in PREFIXES and len(parts[-1]) > 1
 
@@ -61,7 +61,7 @@ class MarkovNameMaker:
                     break
                 next_char = random.choice(self.model[key])
 
-                ok_to_end = self.legit_name(name)
+                ok_to_end = self.plausible_name(name)
                 if next_char == ' ' and ok_to_end:
                     break
                 elif next_char == self.end_char:
