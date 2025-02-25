@@ -49,7 +49,7 @@ class MarkovNameMaker:
 
     def plausible_name(self, name: str) -> bool:
         parts = name.split()
-        return len(parts) >= 4 and parts[-1] not in PREFIXES and len(parts[-1]) > 1
+        return len(parts) >= 3 and parts[-1] not in PREFIXES and len(parts[-1]) > 1
 
     def make_name(self) -> str:
         name = ''
@@ -62,7 +62,7 @@ class MarkovNameMaker:
                 next_char = random.choice(self.model[key])
 
                 ok_to_end = self.plausible_name(name)
-                if ok_to_end and next_char == ' ':
+                if ok_to_end and next_char == ' ' and random.randrange(3) < 2:
                     break
                 elif next_char == self.end_char:
                     if ok_to_end:

@@ -1,5 +1,3 @@
-// Written by Claude 3.7 Sonnet
-
 package main
 
 import (
@@ -30,10 +28,10 @@ var prefixes = map[string]bool{}
 
 // MarkovNameMaker generates plausible names using a Markov chain model
 type MarkovNameMaker struct {
-	order     int
-	endChar   string
-	model     MarkovModel
-	starters  Starters
+	order    int
+	endChar  string
+	model    MarkovModel
+	starters Starters
 }
 
 // Initialize prefixes set with prepositions
@@ -43,15 +41,16 @@ func init() {
 	for _, prefix := range strings.Split(prepositions, " ") {
 		prefixes[prefix] = true
 	}
-	
+
 	rand.Seed(time.Now().UnixNano())
 }
 
 // NewMarkovNameMaker creates a new name generator
 func NewMarkovNameMaker(namesFilePath string, order int) (*MarkovNameMaker, error) {
 	maker := &MarkovNameMaker{
-		order: order,
-		model: make(MarkovModel),
+		order:   order,
+		endChar: "\n", // Default to newline as end character
+		model:   make(MarkovModel),
 	}
 
 	if _, err := os.Stat(ModelPath); err == nil {
@@ -72,7 +71,7 @@ func NewMarkovNameMaker(namesFilePath string, order int) (*MarkovNameMaker, erro
 	} else {
 		// Build new model
 		fmt.Fprintf(os.Stderr, "Indexing %d-grams %s...\n", order, ModelPath)
-		
+
 		// Read names from file
 		file, err := os.Open(namesFilePath)
 		if err != nil {
@@ -83,9 +82,11 @@ func NewMarkovNameMaker(namesFilePath string, order int) (*MarkovNameMaker, erro
 		var names []string
 		scanner := bufio.NewScanner(file)
 		for scanner.Scan() {
+			// Get the line without newline character (Scanner.Text() strips it)
 			name := scanner.Text()
 			if name != "" {
-				names = append(names, name)
+				// Explicitly append the newline to mark end of name
+				names = append(names, name+"\n")
 			}
 		}
 
@@ -127,6 +128,7 @@ func (m *MarkovNameMaker) buildModel(names []string) error {
 			continue
 		}
 
+		// Check that all names have the same ending character
 		if m.endChar == "" {
 			m.endChar = string(name[len(name)-1])
 		} else if string(name[len(name)-1]) != m.endChar {
@@ -148,18 +150,12 @@ func (m *MarkovNameMaker) buildModel(names []string) error {
 }
 
 // plausibleName checks if a name meets criteria for being plausible
-func (m *MarkovNameMaker) plausibleName(name string) bool {
+func plausibleName(name string) bool {
 	parts := strings.Split(name, " ")
-	if len(parts) < 4 {
-		return false
-	}
-	
-	lastWord := parts[len(parts)-1]
-	if prefixes[lastWord] || len(lastWord) <= 1 {
-		return false
-	}
-	
-	return true
+	lastPart := parts[len(parts)-1]
+	return len(parts) >= 3 &&
+		!prefixes[lastPart] &&
+		len(lastPart) > 1
 }
 
 // MakeName generates a new plausible name
@@ -178,9 +174,12 @@ func (m *MarkovNameMaker) MakeName() string {
 			}
 
 			nextChar := nextChars[rand.Intn(len(nextChars))]
-			okToEnd := m.plausibleName(name)
 
-			if okToEnd && nextChar == " " {
+			// We need to check plausibility on the name without the end character
+			nameToCheck := strings.TrimSuffix(name, m.endChar)
+			okToEnd := plausibleName(nameToCheck)
+
+			if okToEnd && nextChar == " " && rand.Intn(3) < 2 {
 				break
 			} else if nextChar == m.endChar {
 				if okToEnd {
@@ -193,12 +192,15 @@ func (m *MarkovNameMaker) MakeName() string {
 			name += nextChar
 		}
 
-		if len(strings.Split(name, " ")) >= 3 {
+		// Remove the endChar from the name before checking word count
+		nameWithoutEndChar := strings.TrimSuffix(name, m.endChar)
+		if len(strings.Split(nameWithoutEndChar, " ")) >= 3 {
 			break
 		}
 	}
 
-	return strings.TrimSpace(name)
+	// Return the name without the endChar character and with any extra spaces trimmed
+	return strings.TrimSpace(strings.TrimSuffix(name, m.endChar))
 }
 
 // MakeNames generates a specified number of names
@@ -212,7 +214,7 @@ func MakeNames(sampleFilePath string, quantity, order int) error {
 	if err != nil {
 		return err
 	}
-	
+
 	writingToFile := (fileInfo.Mode() & os.ModeCharDevice) == 0
 
 	for i := 0; i < quantity; i++ {
