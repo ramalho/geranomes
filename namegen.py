@@ -14,6 +14,7 @@ MODEL_PATH = Path('markov-model.pickle')
 PREPOSITIONS = 'da das de di do dos du del von van'
 PREPOSITIONS += ' ' + PREPOSITIONS.title()
 PREFIXES = set(PREPOSITIONS.split())
+BATCH_SIZE = 10000
 
 
 class MarkovNameMaker:
@@ -79,10 +80,10 @@ def make_names(sample_file_path, quantity, order):
     writing_to_file = not sys.stdout.isatty()
     for i in range(quantity):
         print(maker.make_name())
-        if writing_to_file and i % 1000 == 0:
+        if writing_to_file and i % BATCH_SIZE == 0:
             sys.stderr.write(f'\r{i:_} names generated')
             sys.stderr.flush()
-    if not sys.stdout.isatty():
+    if writing_to_file:
         sys.stderr.write('\r{" "*80}\r')
 
 

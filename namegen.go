@@ -21,6 +21,7 @@ type Starters []string
 const (
 	ModelPath = "markov-model.gob"
 	Order     = 6
+	BatchSize = 10000
 )
 
 // Set of prepositions that shouldn't be the last word in a name
@@ -158,7 +159,7 @@ func plausibleName(name string) bool {
 		len(lastPart) > 1
 }
 
-// MakeName generates a new plausible name
+// MakeName generates a new name
 func (m *MarkovNameMaker) MakeName() string {
 	var name string
 
@@ -175,7 +176,7 @@ func (m *MarkovNameMaker) MakeName() string {
 
 			nextChar := nextChars[rand.Intn(len(nextChars))]
 
-			// We need to check plausibility on the name without the end character
+			// Check plausibility of name without end character
 			nameToCheck := strings.TrimSuffix(name, m.endChar)
 			okToEnd := plausibleName(nameToCheck)
 
@@ -192,7 +193,7 @@ func (m *MarkovNameMaker) MakeName() string {
 			name += nextChar
 		}
 
-		// Remove the endChar from the name before checking word count
+		// Remove endChar from name before checking word count
 		nameWithoutEndChar := strings.TrimSuffix(name, m.endChar)
 		if len(strings.Split(nameWithoutEndChar, " ")) >= 3 {
 			break
@@ -219,7 +220,7 @@ func MakeNames(sampleFilePath string, quantity, order int) error {
 
 	for i := 0; i < quantity; i++ {
 		fmt.Println(maker.MakeName())
-		if writingToFile && i%1000 == 0 {
+		if writingToFile && i%BatchSize == 0 {
 			fmt.Fprintf(os.Stderr, "\r%d names generated", i)
 		}
 	}
