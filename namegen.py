@@ -62,7 +62,7 @@ class MarkovNameMaker:
                 next_char = random.choice(self.model[key])
 
                 ok_to_end = self.plausible_name(name)
-                if next_char == ' ' and ok_to_end:
+                if ok_to_end and next_char == ' ':
                     break
                 elif next_char == self.end_char:
                     if ok_to_end:
