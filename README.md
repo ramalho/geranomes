@@ -28,7 +28,6 @@ Observações:
 * A lista gerada pode conter repetições.
 
 Nomes repetidos ocorrem em praticamente qualquer lista extensa que não tenha sido filtrada.
-Por isso o nome apenas não serve como chave primária em bancos de dados.
 Nas diferentes listas da Fuvest, cerca de 1% a 3% dos nomes são repetidos.
 Nas listas geradas por estes programas, a porcentagem de homônimos pode ser maior ou menor,
 dependendo do número de nomes solicitado.
