@@ -19,7 +19,7 @@ def relatorio(contador):
         print(f'{qtd:2d}\t{nome.strip()}')
     total = contador.total()
     pct = 100 * qtd_homonimos / total
-    stats = f'# {total:_d} nomes, {qtd_homonimos:_d} homônimos ({pct:.1f}%)'
+    stats = f'# nomes: {total:_d}; homônimos: {qtd_homonimos:_d} ({pct:.1f}%)'
     print(stats)
 
 
