@@ -3,11 +3,12 @@
 import sys
 from collections import Counter
 
-def contar(stream):
+def contar(arquivo):
     contador = Counter()
-    for nome in stream:
-        if nome.strip():
-            contador[nome] += 1
+    for linha in arquivo:
+        linha = linha.strip()
+        if linha:
+            contador[linha] += 1
     return contador
 
 def relatorio(contador):
@@ -16,7 +17,7 @@ def relatorio(contador):
         if qtd < 2:
             break
         qtd_homonimos += qtd
-        print(f'{qtd:2d}\t{nome.strip()}')
+        print(f'{qtd:2d}\t{nome}')
     total = contador.total()
     pct = 100 * qtd_homonimos / total
     stats = f'# nomes: {total:_d}; homônimos: {qtd_homonimos:_d} ({pct:.1f}%)'
