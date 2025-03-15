@@ -26,6 +26,7 @@ Observações:
 
 * Cada nome gerado pode ou não existir na amostra.
 * A lista gerada pode conter repetições.
+* `namegen.py` pode acrescentar acentos a certas partes do nome.
 
 Nomes repetidos ocorrem em praticamente qualquer lista extensa que não tenha sido filtrada.
 Nas diferentes listas da Fuvest, cerca de 1% a 3% dos nomes são repetidos.

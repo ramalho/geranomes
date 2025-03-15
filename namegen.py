@@ -74,12 +74,40 @@ class MarkovNameMaker:
         return name.strip()
 
 
+ACCENTED_NAMES: dict[str, tuple[float, str]] = {}
+
+
+def load_accented_names():
+    with open('amostras/nomes-acentuados.tsv', encoding='utf8') as fp:
+        for line in fp:
+            prob_str, name, name_ac = line.strip().split()
+            prob = float(prob_str)
+            ACCENTED_NAMES[name] = prob, name_ac
+
+
+def add_accents(name):
+    parts = name.split()
+    changed = False
+    for i, part in enumerate(parts):
+        if part in ACCENTED_NAMES:
+            prob, name_ac = ACCENTED_NAMES[part]
+            if prob > random.random():
+                parts[i] = name_ac
+                changed = True
+    if changed:
+        return ' '.join(parts)
+    else:
+        return name
+
+
 def make_names(sample_file_path, quantity, order):
     with open(sample_file_path) as sample:
         maker = MarkovNameMaker(sample, order)
     writing_to_file = not sys.stdout.isatty()
     for i in range(quantity):
-        print(maker.make_name())
+        name = maker.make_name()
+        name = add_accents(name) 
+        print(name)
         if writing_to_file and i % BATCH_SIZE == 0:
             sys.stderr.write(f'\r{i:_} names generated')
             sys.stderr.flush()
@@ -92,4 +120,5 @@ if __name__ == '__main__':
         print(f'Usage: {sys.argv[0]} <how_many_names>')
         sys.exit(1)
     quantity = int(sys.argv[1])
+    load_accented_names()
     make_names('amostras/nomes.txt', quantity, 6)
