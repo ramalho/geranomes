@@ -1,82 +1,16 @@
 # Listas de nomes acentuados
 ## ChatGPT
 ### Masculinos
-André
-Antônio
-Álvaro
-Élcio
-Érico
-Ícaro
-Ítalo
-Júnior
-Lúcio
-Márcio
-Mário
-Nélson
-Régis
-Rômulo
-Sérgio
-Túlio
-Úrsulo
-Valério
-Zéfiro
+André Antônio Álvaro Élcio Érico Ícaro Ítalo Júnior Lúcio Márcio
+Mário Nélson Régis Rômulo Sérgio Túlio Úrsulo Valério Zéfiro
 ### Femininos
-Adriana
-Ágata
-Ângela
-Bárbara
-Cíntia
-Érica
-Estér
-Fabíola
-Heloísa
-Íris
-Jéssica
-Lúcia
-Márcia
-Patrícia
-Rúbia
-Sílvia
-Tânia
-Úrsula
-Vitória
+Adriana Ágata Ângela Bárbara Cíntia Érica Estér Fabíola Heloísa Íris
+Jéssica Lúcia Márcia Patrícia Rúbia Sílvia Tânia Úrsula Vitória
 ### Sobrenomes
-Alcântara
-Ângelo
-Antunes
-Araújo
-Âssimos
-Bastós
-Benevídes
-Cáceres
-Cândido
-Cássio
-Conceição
-Côrtes
-Dâmaso
-D’ávila
-Espíndola
-Estévão
-Fagúndez
-Figueiró
-Góis
-Góes
-Lôbo
-Lúcio
-Máximo
-Mônico
-Nóbrega
-Nóbile
-Páscoa
-Patrício
-Rômulo
-Sá
-Sacramento
-Sanches
-Sílvia
-Teles
-Trindade
-Vêncio
+Alcântara Ângelo Araújo Bastós Benevídes Cáceres Cândido Cássio
+Conceição Côrtes Dâmaso D’ávila Espíndola Estévão Fagúndez
+Figueiró Góis Góes Lôbo Lúcio Máximo Mônico Nóbrega Nóbile
+Páscoa Patrício Rômulo Sá Sacramento Sanches Sílvia Vêncio
 
 ## Claude.ai
 
