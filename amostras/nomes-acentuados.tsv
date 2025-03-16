@@ -46,6 +46,7 @@
 0.5	D'Avila	D'Ávila
 0.5	D'avila	D'ávila
 0.5	Damaso	Dâmaso
+0.5	Damasio	Damásio
 0.5	Dario	Dário
 1.0	Dassumpcao	Dassumpção
 1.0	Dassuncao	Dassunção
@@ -59,6 +60,7 @@
 0.5	Edson	Édson
 0.5	Elcio	Élcio
 1.0	Eloa	Éloá
+0.5	Eneas	Enéas
 0.5	Eneias	Enéias
 1.0	Encarnacao	Encarnação
 0.5	Erica	Érica
@@ -89,7 +91,7 @@
 0.5	Gois	Góis
 1.0	Goncalves	Gonçalves
 0.5	Guimaraes	Guimarães
-0.5	Helio	Hélio
+0.8	Helio	Hélio
 0.5	Heloisa	Heloísa
 0.5	Icaro	Ícaro
 0.5	Inacio	Inácio
@@ -172,7 +174,8 @@
 0.5	Sanchez	Sánchez
 0.5	Santarem	Santarém
 0.5	Sergio	Sérgio
-0.5	Silvia	Sílvia
+0.1	Silvia	Sílvia
+0.1	Silvio	Sílvio
 0.5	Socrates	Sócrates
 0.5	Sonia	Sônia
 0.5	Tania	Tânia
@@ -185,10 +188,10 @@
 0.5	Tulio	Túlio
 0.5	Ursula	Úrsula
 0.5	Ursulo	Úrsulo
-0.5	Valeria	Valéria
-0.5	Valerio	Valério
+0.8	Valeria	Valéria
+0.8	Valerio	Valério
 0.5	Valdineia	Valdinéia
-0.5	Vania	Vânia
+0.7	Vania	Vânia
 0.5	Vasquez	Vásquez
 0.5	Vencio	Vêncio
 0.5	Veronica	Verônica
