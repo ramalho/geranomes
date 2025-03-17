@@ -11,6 +11,9 @@ MarkovModel = Mapping[str, list[str]]
 Starters = list[str]
 
 MODEL_PATH = Path('markov-model.pickle')
+SAMPLE_PATH = Path('amostras')
+NAMES_SAMPLE = SAMPLE_PATH / 'nomes.txt'
+ACCENTED_SAMPLE = SAMPLE_PATH / 'nomes-acentuados.tsv'
 PREPOSITIONS = 'da das de di do dos du del von van'
 PREPOSITIONS += ' ' + PREPOSITIONS.title()
 PREFIXES = set(PREPOSITIONS.split())
@@ -78,7 +81,7 @@ ACCENTED_NAMES: dict[str, tuple[float, str]] = {}
 
 
 def load_accented_names():
-    with open('amostras/nomes-acentuados.tsv', encoding='utf8') as fp:
+    with open(ACCENTED_SAMPLE, encoding='utf8') as fp:
         for line in fp:
             prob_str, name, name_ac = line.strip().split()
             prob = float(prob_str)
@@ -127,4 +130,4 @@ if __name__ == '__main__':
         ascii_only = False
     quantity = int(sys.argv[1])
     load_accented_names()
-    make_names('amostras/nomes.txt', quantity, ascii_only)
+    make_names(NAMES_SAMPLE, quantity, ascii_only)
