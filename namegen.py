@@ -100,13 +100,13 @@ def add_accents(name):
         return name
 
 
-def make_names(sample_file_path, quantity, accented, order=6):
+def make_names(sample_file_path, quantity, ascii_only, order=6):
     with open(sample_file_path) as sample:
         maker = MarkovNameMaker(sample, order)
     writing_to_file = not sys.stdout.isatty()
     for i in range(quantity):
         name = maker.make_name()
-        if accented:
+        if not ascii_only:
             name = add_accents(name) 
         print(name)
         if writing_to_file and i % BATCH_SIZE == 0:
@@ -121,10 +121,10 @@ if __name__ == '__main__':
         print(f'Usage: {sys.argv[0]} <how_many_names>')
         sys.exit(1)
     if '-a' in sys.argv:
-        accented = True
+        ascii_only = True
         del sys.argv[sys.argv.index('-a')]
     else:
-        accented = False
+        ascii_only = False
     quantity = int(sys.argv[1])
     load_accented_names()
-    make_names('amostras/nomes.txt', quantity, accented)
+    make_names('amostras/nomes.txt', quantity, ascii_only)
