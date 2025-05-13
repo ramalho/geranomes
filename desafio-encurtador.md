@@ -87,7 +87,8 @@ Por exemplo, abreviar JUNIOR para JR antes de abreviar MARIA para M.
 
 Exemplo de nome que não pode ser abreviado pelas regras sugeridas acima:
 
-```BELARMINONDAS FRANCISQUETTO (27 caracteres)
+```
+BELARMINONDAS FRANCISQUETTO (27 caracteres)
 ```
 
 Neste caso, há duas opções:
