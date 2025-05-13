@@ -241,7 +241,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	samplePath := filepath.Join("amostras", "nomes.txt")
+	samplePath := filepath.Join("amostras", "nomes-reais.txt")
 	if err := MakeNames(samplePath, quantity, Order); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)

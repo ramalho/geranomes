@@ -12,7 +12,7 @@ Starters = list[str]
 
 MODEL_PATH = Path('markov-model.pickle')
 SAMPLE_PATH = Path('amostras')
-NAMES_SAMPLE = SAMPLE_PATH / 'nomes.txt'
+NAMES_SAMPLE = SAMPLE_PATH / 'nomes-reais.txt'
 ACCENTED_SAMPLE = SAMPLE_PATH / 'nomes-acentuados.tsv'
 PREPOSITIONS = 'da das de di do dos du del von van'
 PREPOSITIONS += ' ' + PREPOSITIONS.title()
