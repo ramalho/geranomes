@@ -8,9 +8,9 @@ cada uma delas implementando uma regra.
 
 > **Nota**: Uma variante possível e mais simples é
 um validador de senhas com diferentes regras.
-Nesse caso, é importante introduzir o conceito
-de frase-senha (passphrase), para não impor regras
-que impeçam o uso delas.
+Nesse caso, é importante considerar a boa prática
+de frases-senhas (passphrases), para não impor regras
+que dificultem o uso delas.
 
 ## Objetivo
 
