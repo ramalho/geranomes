@@ -2,16 +2,6 @@
 
 Este é um desafio para uso em coding dojos.
 
-A existência de diferentes regras sugere uma solução
-com uma função principal que aplica funções auxiliares,
-cada uma delas implementando uma regra.
-
-> **Nota**: Uma variante possível e mais simples é
-um validador de senhas com diferentes regras.
-Nesse caso, é importante considerar a boa prática
-de frases-senhas (passphrases), para não impor regras
-que dificultem o uso delas.
-
 ## Objetivo
 
 Abreviar nomes de acordo com um conjunto de regras
@@ -23,8 +13,6 @@ um cartão de crédito.
 * Se o nome tem 26 caracteres ou menos, devolver sem alteração.
 
 * Se o nome tem mais de 26 caracteres, aplicar uma ou mais regras para encurtar.
-Se não for possível encurtar, gerar uma mensagem de
-erro incluindo o nome original completo para que o problema seja resolvido manualmente depois.
 
 ## Pré-requisitos
 
@@ -53,9 +41,9 @@ VICTOR SIVIERO BOMFIM JUNIOR (28 caracteres)
 VICTOR SIVIERO BOMFIM JR
 ```
 
-### Remover preposições
+### Remover uma preposição
 
-Remover preposições como DA, DAS, DE, DO, DOS.
+Remover uma preposição como DA, DAS, DE, DO, DOS, VON, VAN.
 
 Exemplo:
 
@@ -64,7 +52,7 @@ RODRIGO OLIVEIRA DOS SANTOS (27 caracteres)
 RODRIGO OLIVEIRA SANTOS
 ```
 
-### Abreviar parte do sobrenome
+### Abreviar uma parte do sobrenome
 
 Reduzir uma parte do sobrenome para uma letra inicial,
 sem abreviar o último sobrenome.
@@ -79,3 +67,41 @@ JOSELIA CAROLINA CASTRO SANTOS (30 caracteres)
 JOSELIA CAROLINA C SANTOS
 ```
 
+## Observações
+
+### Como organizar a solução
+
+A existência de diferentes regras sugere uma solução com uma função principal que aplica funções auxiliares, cada uma delas implementando uma regra.
+
+A função principal decide se o nome precisa ser abreviado.
+Caso necessário, ela invoca uma função de cada vez,
+até receber um nome com tamanho adequado.
+Algumas ações podem ser aplicadas mais de uma vez,
+como remover uma preposição ou abreviar parte do sobrenome.
+
+Considere priorizar a aplicação das regras para minimizar as alterações no nome.
+Por exemplo, abreviar JUNIOR para JR antes de abreviar MARIA para M.
+
+
+### Nomes que não podem ser abreviados
+
+Exemplo de nome que não pode ser abreviado pelas regras sugeridas acima:
+
+```BELARMINONDAS FRANCISQUETTO (27 caracteres)
+```
+
+Neste caso, há duas opções:
+
+* Levantar uma exceção para forçar uma solução manual.
+
+* Abreviar o primeiro nome para uma letra inicial mas só depois de ter tentado outras regras.
+
+Discuta com o grupo os prós e contras dessas opções.
+Escolham uma, implemente os testes, e implemente a regra.
+
+
+### Variante deste exercício
+
+Uma variante possível e mais simples é um validador de senhas com diferentes regras.
+Nesse caso, é importante considerar a boa prática de frases-senhas (passphrases),
+para não impor regras que dificultem o uso delas.
