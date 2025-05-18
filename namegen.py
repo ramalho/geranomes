@@ -77,23 +77,25 @@ class MarkovNameMaker:
         return name.strip()
 
 
-ACCENTED_NAMES: dict[str, tuple[float, str]] = {}
+type AccentProbabilities = dict[str, tuple[float, str]]
 
 
-def load_accented_names():
+def load_accented_names() -> AccentProbabilities:
+    accent_prob: AccentProbabilities = {}
     with open(ACCENTED_SAMPLE, encoding='utf8') as fp:
         for line in fp:
             prob_str, name, name_ac = line.strip().split()
             prob = float(prob_str)
-            ACCENTED_NAMES[name] = prob, name_ac
+            accent_prob[name] = prob, name_ac
+    return accent_prob
 
 
-def add_accents(name):
+def add_accents(name:str, accent_prob: AccentProbabilities) -> str:
     parts = name.split()
     changed = False
     for i, part in enumerate(parts):
-        if part in ACCENTED_NAMES:
-            prob, name_ac = ACCENTED_NAMES[part]
+        if part in accent_prob:
+            prob, name_ac = accent_prob[part]
             if prob > random.random():
                 parts[i] = name_ac
                 changed = True
@@ -107,16 +109,18 @@ def make_names(sample_file_path, quantity, ascii_only, order=6):
     with open(sample_file_path) as sample:
         maker = MarkovNameMaker(sample, order)
     writing_to_file = not sys.stdout.isatty()
+    accented_names = None if ascii_only else load_accented_names()
+
     for i in range(quantity):
         name = maker.make_name()
-        if not ascii_only:
-            name = add_accents(name) 
+        if accented_names:
+            name = add_accents(name, accented_names)
         print(name)
         if writing_to_file and i % BATCH_SIZE == 0:
             sys.stderr.write(f'\r{i:_} names generated')
             sys.stderr.flush()
     if writing_to_file:
-        sys.stderr.write('\r{" "*80}\r')
+        sys.stderr.write(f'\r{" "*80}\r')
 
 
 if __name__ == '__main__':
@@ -129,5 +133,4 @@ if __name__ == '__main__':
     else:
         ascii_only = False
     quantity = int(sys.argv[1])
-    load_accented_names()
     make_names(NAMES_SAMPLE, quantity, ascii_only)
