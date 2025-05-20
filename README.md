@@ -32,3 +32,7 @@ Nomes repetidos ocorrem em praticamente qualquer lista extensa que não tenha si
 Nas diferentes listas da Fuvest, cerca de 1% a 3% dos nomes são repetidos.
 Nas listas geradas por estes programas, a porcentagem de homônimos pode ser maior ou menor,
 dependendo do número de nomes solicitado.
+
+## Referências
+
+* [Registro Civil](https://transparencia.registrocivil.org.br/inicio): 50 prenomes mais comuns de 2015 a 2024
