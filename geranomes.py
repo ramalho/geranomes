@@ -3,14 +3,15 @@ import pickle
 import random
 import sys
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
 from pathlib import Path
 
 MarkovModel = Mapping[str, list[str]]
 Starters = list[str]
+PartCounts = Mapping[int, int]  # number of names by number of words
 
-MODEL_PATH = Path('markov-model.pickle')
+MODEL_PREFIX = 'model-order'
 SAMPLE_PATH = Path('amostras')
 NAMES_SAMPLE = SAMPLE_PATH / 'nomes-reais.txt'
 ACCENTED_SAMPLE = SAMPLE_PATH / 'nomes-acentuados.tsv'
@@ -18,46 +19,58 @@ PREPOSITIONS = 'da das de di do dos du del von van'
 PREPOSITIONS += ' ' + PREPOSITIONS.title()
 PREFIXES = set(PREPOSITIONS.split())
 BATCH_SIZE = 10000
+MIN_PARTS = 2  # minimum number of words in a name
+
+
+def model_path_for(order: int) -> Path:
+    return Path(f'{MODEL_PREFIX}-{order}.pickle')
 
 
 class MarkovNameMaker:
     def __init__(self, names: Iterable[str], order: int = 6):
         self.order = order
-        self.end_char = ''
-        if MODEL_PATH.exists():
-            with open(MODEL_PATH, 'rb') as f:
-                self.model, self.starters = pickle.load(f)
+        self.end_char = '\n'
+        model_path = model_path_for(order)
+        if model_path.exists():
+            with open(model_path, 'rb') as f:
+                self.model, self.starters, part_counts = pickle.load(f)
         else:
-            sys.stderr.write(f'Indexing {order}-grams {MODEL_PATH}...\n')
-            self.model, self.starters = self._build_model(names)
-            with open(MODEL_PATH, 'wb') as f:
-                pickle.dump((self.model, self.starters), f)
+            sys.stderr.write(f'Indexing {order}-grams to {model_path}...\n')
+            self.model, self.starters, part_counts = self._build_model(names)
+            with open(model_path, 'wb') as f:
+                pickle.dump((self.model, self.starters, part_counts), f)
+        self.part_sizes = [n for n in part_counts if n >= MIN_PARTS]
+        self.part_weights = [part_counts[n] for n in self.part_sizes]
 
-    def _build_model(self, names: Iterable[str]) -> tuple[MarkovModel, Starters]:
+    def _build_model(self, names: Iterable[str]) -> tuple[MarkovModel, Starters, PartCounts]:
         model: MarkovModel = defaultdict(list)
         starters: Starters = []
+        part_counts: Counter[int] = Counter()
 
         for name in names:
-            if self.end_char == '':
-                self.end_char = name[-1]
-            else:
-                if self.end_char != name[-1]:
-                    print('All names must have the same last character. Ex: \\n')
-                    sys.exit(1)
+            if name[-1] != self.end_char:
+                print(f'All names must end with {self.end_char!r}')
+                sys.exit(1)
             starters.append(name[: self.order])
+            part_counts[len(name.split())] += 1
             for i in range(len(name) - self.order):
                 key = name[i : i + self.order]
                 next_char = name[i + self.order]
                 model[key].append(next_char)
-        return model, starters
+        return model, starters, part_counts
 
-    def plausible_name(self, name: str) -> bool:
+    def target_parts(self) -> int:
+        """Draw a number of words with the frequencies found in the sample"""
+        return random.choices(self.part_sizes, self.part_weights)[0]
+
+    def plausible_name(self, name: str, min_parts: int) -> bool:
         parts = name.split()
-        return len(parts) >= 3 and parts[-1] not in PREFIXES and len(parts[-1]) > 1
+        return len(parts) >= min_parts and parts[-1] not in PREFIXES and len(parts[-1]) > 1
 
     def make_name(self) -> str:
         name = ''
-        while len(name.split()) < 3:  # restart if short name generated
+        while len(name.split()) < MIN_PARTS:  # restart if short name generated
+            target = self.target_parts()
             name = random.choice(self.starters)
             while True:
                 key = name[-self.order :]
@@ -65,14 +78,11 @@ class MarkovNameMaker:
                     break
                 next_char = random.choice(self.model[key])
 
-                ok_to_end = self.plausible_name(name)
-                if ok_to_end and next_char == ' ' and random.randrange(3) < 2:
+                ok_to_end = self.plausible_name(name, target)
+                if ok_to_end and next_char in (' ', self.end_char):
                     break
                 elif next_char == self.end_char:
-                    if ok_to_end:
-                        break
-                    else:
-                        next_char = ' '
+                    next_char = ' '
                 name += next_char
         return name.strip()
 

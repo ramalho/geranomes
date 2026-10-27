@@ -1,7 +1,7 @@
-markov-model.pickle
-markov-model.gob
+model-order-*.pickle
+model-order-*.gob
 saida*.txt
-namegen
+geranomes
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
